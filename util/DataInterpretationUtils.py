@@ -256,3 +256,68 @@ class DataDescriptionService:
         iv_table.loc[iv_table['variable'] == 'famsize', 'IV'] = iv
         print(data.head())
         self.data = convert_dummy(self.data, 'famsizegp')
+
+    def describe_categorical_variable(self):
+        self.describe_income_type()
+        self.describe_occupation_type()
+        self.describe_house_type()
+        self.describe_education()
+        self.describe_marriage_condition()
+
+    def describe_income_type(self):
+        iv_table = self.info_value_table
+        print(self.data['inctp'].value_counts(sort=False))
+        print(self.data['inctp'].value_counts(normalize=True, sort=False))
+        self.data.loc[self.data['inctp'] == 'Pensioner', 'inctp'] = 'State servant'
+        self.data.loc[self.data['inctp'] == 'Student', 'inctp'] = 'State servant'
+        iv, data = calculate_information_value(self.data, 'inctp', 'target')
+        iv_table.loc[iv_table['variable'] == 'inctp', 'IV'] = iv
+        data.head()
+        self.data = convert_dummy(self.data, 'inctp')
+
+    def describe_occupation_type(self):
+        iv_table = self.info_value_table
+        self.data.loc[(self.data['occyp'] == 'Cleaning staff') | (self.data['occyp'] == 'Cooking staff') | (
+                self.data['occyp'] == 'Drivers') | (self.data['occyp'] == 'Laborers') | (
+                              self.data['occyp'] == 'Low-skill Laborers') | (
+                              self.data['occyp'] == 'Security staff') | (
+                              self.data['occyp'] == 'Waiters/barmen staff'), 'occyp'] = 'Laborwk'
+        self.data.loc[(self.data['occyp'] == 'Accountants') | (self.data['occyp'] == 'Core staff') | (
+                self.data['occyp'] == 'HR staff') | (self.data['occyp'] == 'Medicine staff') | (
+                              self.data['occyp'] == 'Private service staff') | (
+                              self.data['occyp'] == 'Realty agents') | (self.data['occyp'] == 'Sales staff') | (
+                              self.data['occyp'] == 'Secretaries'), 'occyp'] = 'officewk'
+        self.data.loc[(self.data['occyp'] == 'Managers') | (self.data['occyp'] == 'High skill tech staff') | (
+                self.data['occyp'] == 'IT staff'), 'occyp'] = 'hightecwk'
+        print(self.data['occyp'].value_counts())
+        iv, data = calculate_information_value(self.data, 'occyp', 'target')
+        iv_table.loc[iv_table['variable'] == 'occyp', 'IV'] = iv
+        data.head()
+
+        self.data = convert_dummy(self.data, 'occyp')
+
+    def describe_house_type(self):
+        iv_table = self.info_value_table
+        iv, data = calculate_information_value(self.data, 'houtp', 'target')
+        iv_table.loc[iv_table['variable'] == 'houtp', 'IV'] = iv
+        data.head()
+        self.data = convert_dummy(self.data, 'houtp')
+
+    def describe_education(self):
+        iv_table = self.info_value_table
+        self.data.loc[self.data['edutp'] == 'Academic degree', 'edutp'] = 'Higher education'
+        iv, data = calculate_information_value(self.data, 'edutp', 'target')
+        iv_table.loc[iv_table['variable'] == 'edutp', 'IV'] = iv
+        data.head()
+
+        self.data = convert_dummy(self.data, 'edutp')
+
+    def describe_marriage_condition(self):
+        iv_table = self.info_value_table
+        self.data['famtp'].value_counts(normalize=True, sort=False)
+
+        iv, data = calculate_information_value(self.data, 'famtp', 'target')
+        iv_table.loc[iv_table['variable'] == 'famtp', 'IV'] = iv
+        data.head()
+
+        self.data = convert_dummy(self.data, 'famtp')

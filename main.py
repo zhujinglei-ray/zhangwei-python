@@ -6,4 +6,8 @@ from util.DataInterpretationUtils import DataDescriptionService
 # data.get_cleaned_data()
 
 descriptionService = DataDescriptionService()
+
+descriptionService.describe_binary_value()
 descriptionService.describe_continuous_value()
+descriptionService.describe_categorical_variable()
+

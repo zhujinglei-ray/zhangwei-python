@@ -40,22 +40,24 @@ def plot_confusion_matrix(cm, classes,
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
-    #如果需要 看图片 输入 plt.show()
+    # 如果需要 看图片 输入 plt.show()
     # plt.show()
+
 
 class Model:
     def __init__(self, data):
         self.Y = data['target']
-        self.X = data[['Gender', 'Reality', 'ChldNo_1', 'ChldNo_2More', 'wkphone',
-                       'gp_Age_high', 'gp_Age_highest', 'gp_Age_low',
-                       'gp_Age_lowest', 'gp_worktm_high', 'gp_worktm_highest',
-                       'gp_worktm_low', 'gp_worktm_medium', 'occyp_hightecwk',
-                       'occyp_officewk', 'famsizegp_1', 'famsizegp_3more',
-                       'houtp_Co-op apartment', 'houtp_Municipal apartment',
-                       'houtp_Office apartment', 'houtp_Rented apartment',
-                       'houtp_With parents', 'edutp_Higher education',
-                       'edutp_Incomplete higher', 'edutp_Lower secondary', 'famtp_Civil marriage',
-                       'famtp_Separated', 'famtp_Single / not married', 'famtp_Widow']]
+        self.X = data[['gender', 'real_estate', 'child_num_1', 'child_num_2More', 'work_phone',
+                       'gp_age_high', 'gp_age_highest', 'gp_age_low',
+                       'gp_age_lowest', 'gp_work_time_high', 'gp_work_time_highest',
+                       'gp_work_time_low', 'gp_work_time_medium', 'occupation_type_hightecwk',
+                       'occupation_type_officewk', 'famsizegp_1', 'famsizegp_3more',
+                       'house_type_Co-op apartment', 'house_type_Municipal apartment',
+                       'house_type_Office apartment', 'house_type_Rented apartment',
+                       'house_type_With parents', 'education_type_Higher education',
+                       'education_type_Incomplete higher', 'education_type_Lower secondary',
+                       'family_type_Civil marriage',
+                       'family_type_Separated', 'family_type_Single / not married', 'family_type_Widow']]
         self.X_train, self.X_test, self.y_train, self.y_test = self._smote_deal_with_sample_imbalance()
 
     # Using Synthetic Minority Over-Sampling Technique(SMOTE) to overcome sample imbalance problem.
@@ -88,7 +90,11 @@ class Model:
                               classes=class_names, normalize=True,
                               title='Normalized Confusion Matrix: Logistic Regression')
         # model.predict()
-        print(self.X_train.head(1))
+        print(self.X_train.head(6).iloc[:, 0:10])
+        print(self.X_train.head(6).iloc[:, 11:15])
+        print(self.X_train.head(6).iloc[:, 16:20])
+        print(self.X_train.head(6).iloc[:, 21:25])
+        print(self.X_train.head(6).iloc[:, 26:30])
         return model
 
     def simple_decision_tree(self):

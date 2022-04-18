@@ -69,13 +69,13 @@ class Data:
     def rename_data_frame(self):
         data = self.clean_data_by_labelling()
         data.rename(
-            columns={'CODE_GENDER': 'Gender', 'FLAG_OWN_CAR': 'Car', 'FLAG_OWN_REALTY': 'Reality',
-                     'CNT_CHILDREN': 'ChldNo', 'AMT_INCOME_TOTAL': 'inc',
-                     'NAME_EDUCATION_TYPE': 'edutp', 'NAME_FAMILY_STATUS': 'famtp',
-                     'NAME_HOUSING_TYPE': 'houtp', 'FLAG_EMAIL': 'email',
-                     'NAME_INCOME_TYPE': 'inctp', 'FLAG_WORK_PHONE': 'wkphone',
+            columns={'CODE_GENDER': 'gender', 'FLAG_OWN_CAR': 'Car', 'FLAG_OWN_REALTY': 'real_estate',
+                     'CNT_CHILDREN': 'child_num', 'AMT_INCOME_TOTAL': 'inc',
+                     'NAME_EDUCATION_TYPE': 'education_type', 'NAME_FAMILY_STATUS': 'family_type',
+                     'NAME_HOUSING_TYPE': 'house_type', 'FLAG_EMAIL': 'email',
+                     'NAME_INCOME_TYPE': 'inctp', 'FLAG_WORK_PHONE': 'work_phone',
                      'FLAG_PHONE': 'phone', 'CNT_FAM_MEMBERS': 'famsize',
-                     'OCCUPATION_TYPE': 'occyp'
+                     'OCCUPATION_TYPE': 'occupation_type'
                      }, inplace=True)
 
         data = data.dropna()

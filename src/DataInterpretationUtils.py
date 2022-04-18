@@ -103,10 +103,10 @@ class DataDescriptionService:
 
     def describe_gender(self):
         iv_table = self.info_value_table
-        self.data['Gender'] = self.data['Gender'].replace(['F', 'M'], [0, 1])
-        print(self.data['Gender'].value_counts())
-        iv, calculated_data = calculate_information_value(self.data, 'Gender', 'target')
-        iv_table.loc[iv_table['variable'] == 'Gender', 'IV'] = iv
+        self.data['gender'] = self.data['gender'].replace(['F', 'M'], [0, 1])
+        print(self.data['gender'].value_counts())
+        iv, calculated_data = calculate_information_value(self.data, 'gender', 'target')
+        iv_table.loc[iv_table['variable'] == 'gender', 'IV'] = iv
         print(calculated_data.head())
 
     def describe_own_car(self):
@@ -120,10 +120,10 @@ class DataDescriptionService:
 
     def describe_own_house(self):
         iv_table = self.info_value_table
-        self.data['Reality'] = self.data['Reality'].replace(['N', 'Y'], [0, 1])
-        print(self.data['Reality'].value_counts())
-        iv, calculated_data = calculate_information_value(self.data, 'Reality', 'target')
-        iv_table.loc[iv_table['variable'] == 'Reality', 'IV'] = iv
+        self.data['real_estate'] = self.data['real_estate'].replace(['N', 'Y'], [0, 1])
+        print(self.data['real_estate'].value_counts())
+        iv, calculated_data = calculate_information_value(self.data, 'real_estate', 'target')
+        iv_table.loc[iv_table['variable'] == 'real_estate', 'IV'] = iv
         print(calculated_data.head())
 
     def describe_own_phone(self):
@@ -145,10 +145,10 @@ class DataDescriptionService:
 
     def describe_own_working_phone(self):
         iv_table = self.info_value_table
-        self.data['wkphone'] = self.data['wkphone'].astype(str)
-        self.data.drop(self.data[self.data['wkphone'] == 'nan'].index, inplace=True)
-        iv, calculated_data = calculate_information_value(self.data, 'wkphone', 'target')
-        iv_table.loc[iv_table['variable'] == 'wkphone', 'IV'] = iv
+        self.data['work_phone'] = self.data['work_phone'].astype(str)
+        self.data.drop(self.data[self.data['work_phone'] == 'nan'].index, inplace=True)
+        iv, calculated_data = calculate_information_value(self.data, 'work_phone', 'target')
+        iv_table.loc[iv_table['variable'] == 'work_phone', 'IV'] = iv
         print(calculated_data.head())
 
     # Continuous Variables
@@ -163,12 +163,12 @@ class DataDescriptionService:
 
     def describe_child_num(self):
         iv_table = self.info_value_table
-        self.data.loc[self.data['ChldNo'] >= 2, 'ChldNo'] = '2More'
-        print(self.data['ChldNo'].value_counts(sort=False))
-        iv, calculated_data = calculate_information_value(self.data, 'ChldNo', 'target')
-        iv_table.loc[iv_table['variable'] == 'ChldNo', 'IV'] = iv
+        self.data.loc[self.data['child_num'] >= 2, 'child_num'] = '2More'
+        print(self.data['child_num'].value_counts(sort=False))
+        iv, calculated_data = calculate_information_value(self.data, 'child_num', 'target')
+        iv_table.loc[iv_table['variable'] == 'child_num', 'IV'] = iv
 
-        self.data = convert_dummy(self.data, 'ChldNo')
+        self.data = convert_dummy(self.data, 'child_num')
         print(calculated_data.head())
 
     def describe_annual_income(self):
@@ -187,30 +187,30 @@ class DataDescriptionService:
 
     def describe_age(self):
         iv_table = self.info_value_table
-        self.data['Age'] = -(self.data['DAYS_BIRTH']) // 365
-        print(self.data['Age'].value_counts(bins=10, normalize=True, sort=False))
-        self.data['Age'].plot(kind='hist', bins=20, density=True)
+        self.data['age'] = -(self.data['DAYS_BIRTH']) // 365
+        print(self.data['age'].value_counts(bins=10, normalize=True, sort=False))
+        self.data['age'].plot(kind='hist', bins=20, density=True)
 
-        self.data = get_category(self.data, 'Age', 5, ["lowest", "low", "medium", "high", "highest"])
-        iv, data = calculate_information_value(self.data, 'gp_Age', 'target')
+        self.data = get_category(self.data, 'age', 5, ["lowest", "low", "medium", "high", "highest"])
+        iv, data = calculate_information_value(self.data, 'gp_age', 'target')
         iv_table.loc[iv_table['variable'] == 'DAYS_BIRTH', 'IV'] = iv
         print(data.head())
-        self.data = convert_dummy(self.data, 'gp_Age')
+        self.data = convert_dummy(self.data, 'gp_age')
 
     def describe_working_years(self):
         iv_table = self.info_value_table
-        self.data['worktm'] = -(self.data['DAYS_EMPLOYED']) // 365
-        self.data[self.data['worktm'] < 0] = np.nan  # replace by na
+        self.data['work_time'] = -(self.data['DAYS_EMPLOYED']) // 365
+        self.data[self.data['work_time'] < 0] = np.nan  # replace by na
         self.data['DAYS_EMPLOYED']
-        self.data['worktm'].fillna(self.data['worktm'].mean(), inplace=True)  # replace na by mean
-        self.data['worktm'].plot(kind='hist', bins=20, density=True)
+        self.data['work_time'].fillna(self.data['work_time'].mean(), inplace=True)  # replace na by mean
+        self.data['work_time'].plot(kind='hist', bins=20, density=True)
 
-        self.data = get_category(self.data, 'worktm', 5, ["lowest", "low", "medium", "high", "highest"])
-        iv, data = calculate_information_value(self.data, 'gp_worktm', 'target')
+        self.data = get_category(self.data, 'work_time', 5, ["lowest", "low", "medium", "high", "highest"])
+        iv, data = calculate_information_value(self.data, 'gp_work_time', 'target')
         iv_table.loc[iv_table['variable'] == 'DAYS_EMPLOYED', 'IV'] = iv
         print(data.head())
 
-        self.data = convert_dummy(self.data, 'gp_worktm')
+        self.data = convert_dummy(self.data, 'gp_work_time')
 
     def describe_family_size(self):
         iv_table = self.info_value_table
@@ -245,57 +245,57 @@ class DataDescriptionService:
 
     def describe_occupation_type(self):
         iv_table = self.info_value_table
-        self.data.loc[(self.data['occyp'] == 'Cleaning staff') | (self.data['occyp'] == 'Cooking staff') | (
-                self.data['occyp'] == 'Drivers') | (self.data['occyp'] == 'Laborers') | (
-                              self.data['occyp'] == 'Low-skill Laborers') | (
-                              self.data['occyp'] == 'Security staff') | (
-                              self.data['occyp'] == 'Waiters/barmen staff'), 'occyp'] = 'Laborwk'
-        self.data.loc[(self.data['occyp'] == 'Accountants') | (self.data['occyp'] == 'Core staff') | (
-                self.data['occyp'] == 'HR staff') | (self.data['occyp'] == 'Medicine staff') | (
-                              self.data['occyp'] == 'Private service staff') | (
-                              self.data['occyp'] == 'Realty agents') | (self.data['occyp'] == 'Sales staff') | (
-                              self.data['occyp'] == 'Secretaries'), 'occyp'] = 'officewk'
-        self.data.loc[(self.data['occyp'] == 'Managers') | (self.data['occyp'] == 'High skill tech staff') | (
-                self.data['occyp'] == 'IT staff'), 'occyp'] = 'hightecwk'
-        print(self.data['occyp'].value_counts())
-        iv, data = calculate_information_value(self.data, 'occyp', 'target')
-        iv_table.loc[iv_table['variable'] == 'occyp', 'IV'] = iv
+        self.data.loc[(self.data['occupation_type'] == 'Cleaning staff') | (self.data['occupation_type'] == 'Cooking staff') | (
+                self.data['occupation_type'] == 'Drivers') | (self.data['occupation_type'] == 'Laborers') | (
+                              self.data['occupation_type'] == 'Low-skill Laborers') | (
+                              self.data['occupation_type'] == 'Security staff') | (
+                              self.data['occupation_type'] == 'Waiters/barmen staff'), 'occupation_type'] = 'Laborwk'
+        self.data.loc[(self.data['occupation_type'] == 'Accountants') | (self.data['occupation_type'] == 'Core staff') | (
+                self.data['occupation_type'] == 'HR staff') | (self.data['occupation_type'] == 'Medicine staff') | (
+                              self.data['occupation_type'] == 'Private service staff') | (
+                              self.data['occupation_type'] == 'Realty agents') | (self.data['occupation_type'] == 'Sales staff') | (
+                              self.data['occupation_type'] == 'Secretaries'), 'occupation_type'] = 'officewk'
+        self.data.loc[(self.data['occupation_type'] == 'Managers') | (self.data['occupation_type'] == 'High skill tech staff') | (
+                self.data['occupation_type'] == 'IT staff'), 'occupation_type'] = 'hightecwk'
+        print(self.data['occupation_type'].value_counts())
+        iv, data = calculate_information_value(self.data, 'occupation_type', 'target')
+        iv_table.loc[iv_table['variable'] == 'occupation_type', 'IV'] = iv
         data.head()
 
-        self.data = convert_dummy(self.data, 'occyp')
+        self.data = convert_dummy(self.data, 'occupation_type')
 
     def describe_house_type(self):
         iv_table = self.info_value_table
-        iv, data = calculate_information_value(self.data, 'houtp', 'target')
-        iv_table.loc[iv_table['variable'] == 'houtp', 'IV'] = iv
+        iv, data = calculate_information_value(self.data, 'house_type', 'target')
+        iv_table.loc[iv_table['variable'] == 'house_type', 'IV'] = iv
         data.head()
-        self.data = convert_dummy(self.data, 'houtp')
+        self.data = convert_dummy(self.data, 'house_type')
 
     def describe_education(self):
         iv_table = self.info_value_table
-        self.data.loc[self.data['edutp'] == 'Academic degree', 'edutp'] = 'Higher education'
-        iv, data = calculate_information_value(self.data, 'edutp', 'target')
-        iv_table.loc[iv_table['variable'] == 'edutp', 'IV'] = iv
+        self.data.loc[self.data['education_type'] == 'Academic degree', 'education_type'] = 'Higher education'
+        iv, data = calculate_information_value(self.data, 'education_type', 'target')
+        iv_table.loc[iv_table['variable'] == 'education_type', 'IV'] = iv
         data.head()
 
-        self.data = convert_dummy(self.data, 'edutp')
+        self.data = convert_dummy(self.data, 'education_type')
 
     def describe_marriage_condition(self):
         iv_table = self.info_value_table
-        self.data['famtp'].value_counts(normalize=True, sort=False)
+        self.data['family_type'].value_counts(normalize=True, sort=False)
 
-        iv, data = calculate_information_value(self.data, 'famtp', 'target')
-        iv_table.loc[iv_table['variable'] == 'famtp', 'IV'] = iv
+        iv, data = calculate_information_value(self.data, 'family_type', 'target')
+        iv_table.loc[iv_table['variable'] == 'family_type', 'IV'] = iv
         data.head()
 
-        self.data = convert_dummy(self.data, 'famtp')
+        self.data = convert_dummy(self.data, 'family_type')
 
     # 最终显示 信息价值
     def show_information_value(self):
         iv_table = self.info_value_table
         ivtable = iv_table.sort_values(by='IV', ascending=False)
         ivtable.loc[ivtable['variable'] == 'DAYS_BIRTH', 'variable'] = 'agegp'
-        ivtable.loc[ivtable['variable'] == 'DAYS_EMPLOYED', 'variable'] = 'worktmgp'
+        ivtable.loc[ivtable['variable'] == 'DAYS_EMPLOYED', 'variable'] = 'work_timegp'
         ivtable.loc[ivtable['variable'] == 'inc', 'variable'] = 'incgp'
         print(ivtable)
 

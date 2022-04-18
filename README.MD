@@ -15,8 +15,10 @@
 如果安装不成功（matplot）你需要升级pip的版本
 `pip install --upgrade pip`
 
-
-
 如果数据有更新 请 重新运行 main文件 去生成 新的模型
 
 `python3 main.py`
+
+开启微服务
+flask 跑在 5000 端口上 确保 端口是空的
+`开始`

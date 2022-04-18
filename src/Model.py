@@ -87,6 +87,7 @@ class Model:
                               classes=class_names, normalize=True,
                               title='Normalized Confusion Matrix: Logistic Regression')
         # model.predict()
+        print(self.X_train.head(1))
         return model
 
     def simple_decision_tree(self):

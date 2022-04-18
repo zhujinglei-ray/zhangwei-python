@@ -1,5 +1,5 @@
 from flask import Flask, request
-
+import src.Predict as predict
 app = Flask(__name__)
 
 
@@ -13,7 +13,8 @@ def hello():
 @app.route('/test', methods=['POST'])
 def test():
     print(request.data)
-    return "success"
+    res = predict.predict_with_logistic_regression(request.data)
+    return res
 
 if __name__ == '__main__':
     app.run(debug=True)

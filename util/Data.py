@@ -59,10 +59,10 @@ class Data:
         new_data['target'] = new_data['dep_value']
         new_data.loc[new_data['target'] == 'Yes', 'target'] = 1
         new_data.loc[new_data['target'] == 'No', 'target'] = 0
-        cpunt['dep_value'].value_counts(normalize=True)
-        print("计算'坏' 用户的 值")
-        print(cpunt['dep_value'].value_counts())
-        print(new_data.head(6))
+        # cpunt['dep_value'].value_counts(normalize=True)
+        # print("计算'坏' 用户的 值")
+        # print(cpunt['dep_value'].value_counts())
+        # print(new_data.head(6))
         return new_data
 
     # 重命名 并且 去除 空值
@@ -80,8 +80,8 @@ class Data:
 
         data.dropna()
         renamed_data = data.mask(data == 'NULL').dropna()
-        print("去掉 na 或者 空值")
-        print(renamed_data.head(6))
+        # print("去掉 na 或者 空值")
+        # print(renamed_data.head(6))
         return renamed_data
 
     def get_cleaned_data(self):

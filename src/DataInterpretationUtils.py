@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from util.Data import Data
+from src.Data import Data
 
 
 # 准备 information value 的表

@@ -78,7 +78,7 @@ class Data:
                      'OCCUPATION_TYPE': 'occyp'
                      }, inplace=True)
 
-        data.dropna()
+        data = data.dropna()
         renamed_data = data.mask(data == 'NULL').dropna()
         # print("去掉 na 或者 空值")
         # print(renamed_data.head(6))

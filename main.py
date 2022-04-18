@@ -6,9 +6,4 @@ from util.DataInterpretationUtils import DataDescriptionService
 # data.get_cleaned_data()
 
 descriptionService = DataDescriptionService()
-
-descriptionService.describe_gender()
-descriptionService.describe_own_email()
-descriptionService.describe_own_car()
-descriptionService.describe_own_house()
-descriptionService.describe_own_working_phone()
+descriptionService.describe_continuous_value()

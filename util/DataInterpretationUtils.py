@@ -74,18 +74,18 @@ def convert_dummy(data_frame, feature, rank=0):
 
 
 # 得到分类
-def get_category(data_frame, col, bins_num, labels, qcut=False):
+def get_category(df, col, binsnum, labels, qcut=False):
     if qcut:
-        local_df = pd.qcut(data_frame[col], q=bins_num, labels=labels)  # quantile cut
+        localdf = pd.qcut(df[col], q=binsnum, labels=labels)  # quantile cut
     else:
-        local_df = pd.cut(data_frame[col], bins=bins_num, labels=labels)  # equal-length cut
+        localdf = pd.cut(df[col], bins=binsnum, labels=labels)  # equal-length cut
 
-    local_df = pd.DataFrame(local_df)
+    localdf = pd.DataFrame(localdf)
     name = 'gp' + '_' + col
-    local_df[name] = local_df[col]
-    data_frame = data_frame.join(local_df[name])
-    data_frame[name] = data_frame[name].astype(object)
-    return data_frame
+    localdf[name] = localdf[col]
+    df = df.join(localdf[name])
+    df[name] = df[name].astype(object)
+    return df
 
 
 # 输出 confusion 矩阵
@@ -125,57 +125,134 @@ class DataDescriptionService:
         self.info_value_table = prepare_info_value_table(self.data)
 
     # binary feature
+    def describe_binary_value(self):
+        self.describe_gender()
+        self.describe_own_car()
+        self.describe_own_house()
+        self.describe_own_email()
+        self.describe_own_phone()
+        self.describe_own_working_phone()
+
     def describe_gender(self):
-        data = self.data
         iv_table = self.info_value_table
-        data['Gender'] = data['Gender'].replace(['F', 'M'], [0, 1])
-        print(data['Gender'].value_counts())
-        iv, calculated_data = calculate_information_value(data, 'Gender', 'target')
+        self.data['Gender'] = self.data['Gender'].replace(['F', 'M'], [0, 1])
+        print(self.data['Gender'].value_counts())
+        iv, calculated_data = calculate_information_value(self.data, 'Gender', 'target')
         iv_table.loc[iv_table['variable'] == 'Gender', 'IV'] = iv
-        calculated_data.head()
+        print(calculated_data.head())
 
     def describe_own_car(self):
-        data = self.data
         iv_table = self.info_value_table
-        data['Car'] = data['Car'].replace(['N', 'Y'], [0, 1])
-        print(data['Car'].value_counts())
-        iv, calculated_data = calculate_information_value(data, 'Car', 'target')
+        self.data['Car'] = self.data['Car'].replace(['N', 'Y'], [0, 1])
+        print(self.data['Car'].value_counts())
+        iv, calculated_data = calculate_information_value(self.data, 'Car', 'target')
         iv_table.loc[iv_table['variable'] == 'Car', 'IV'] = iv
+        print()
         calculated_data.head()
 
     def describe_own_house(self):
-        data = self.data
         iv_table = self.info_value_table
-        data['Reality'] = data['Reality'].replace(['N', 'Y'], [0, 1])
-        print(data['Reality'].value_counts())
-        iv, calculated_data = calculate_information_value(data, 'Reality', 'target')
+        self.data['Reality'] = self.data['Reality'].replace(['N', 'Y'], [0, 1])
+        print(self.data['Reality'].value_counts())
+        iv, calculated_data = calculate_information_value(self.data, 'Reality', 'target')
         iv_table.loc[iv_table['variable'] == 'Reality', 'IV'] = iv
-        calculated_data.head()
+        print(calculated_data.head())
 
     def describe_own_phone(self):
-        data = self.data
         iv_table = self.info_value_table
-        data['phone'] = data['phone'].astype(str)
-        print(data['phone'].value_counts(normalize=True, sort=False))
-        data.drop(data[data['phone'] == 'nan'].index, inplace=True)
-        iv, calculated_data = calculate_information_value(data, 'phone', 'target')
+        self.data['phone'] = self.data['phone'].astype(str)
+        print(self.data['phone'].value_counts(normalize=True, sort=False))
+        self.data.drop(self.data[self.data['phone'] == 'nan'].index, inplace=True)
+        iv, calculated_data = calculate_information_value(self.data, 'phone', 'target')
         iv_table.loc[iv_table['variable'] == 'phone', 'IV'] = iv
-        calculated_data.head()
+        print(calculated_data.head())
 
     def describe_own_email(self):
-        data = self.data
         iv_table = self.info_value_table
-        print(data['email'].value_counts(normalize=True, sort=False))
-        data['email'] = data['email'].astype(str)
-        iv, calculated_data = calculate_information_value(data, 'email', 'target')
+        print(self.data['email'].value_counts(normalize=True, sort=False))
+        self.data['email'] = self.data['email'].astype(str)
+        iv, calculated_data = calculate_information_value(self.data, 'email', 'target')
         iv_table.loc[iv_table['variable'] == 'email', 'IV'] = iv
-        calculated_data.head()
+        print(calculated_data.head())
 
     def describe_own_working_phone(self):
-        data = self.data
         iv_table = self.info_value_table
-        data['wkphone'] = data['wkphone'].astype(str)
-        data.drop(data[data['wkphone'] == 'nan'].index, inplace=True)
-        iv, calculated_data = calculate_information_value(data, 'wkphone', 'target')
+        self.data['wkphone'] = self.data['wkphone'].astype(str)
+        self.data.drop(self.data[self.data['wkphone'] == 'nan'].index, inplace=True)
+        iv, calculated_data = calculate_information_value(self.data, 'wkphone', 'target')
         iv_table.loc[iv_table['variable'] == 'wkphone', 'IV'] = iv
-        calculated_data.head()
+        print(calculated_data.head())
+
+    # Continuous Variables
+    def describe_continuous_value(self):
+        self.describe_child_num()
+        self.describe_annual_income()
+        self.describe_age()
+        self.describe_working_years()
+        self.describe_family_size()
+
+    # def convert_continuous_to_dummy(self):
+
+    def describe_child_num(self):
+        iv_table = self.info_value_table
+        self.data.loc[self.data['ChldNo'] >= 2, 'ChldNo'] = '2More'
+        print(self.data['ChldNo'].value_counts(sort=False))
+        iv, calculated_data = calculate_information_value(self.data, 'ChldNo', 'target')
+        iv_table.loc[iv_table['variable'] == 'ChldNo', 'IV'] = iv
+
+        self.data = convert_dummy(self.data, 'ChldNo')
+        print(calculated_data.head())
+
+    def describe_annual_income(self):
+        iv_table = self.info_value_table
+        self.data['inc'] = self.data['inc'].astype(object)
+        self.data['inc'] = self.data['inc'] / 10000
+        print(self.data['inc'].value_counts(bins=10, sort=False))
+        self.data['inc'].plot(kind='hist', bins=50, density=True)
+
+        # 这里有bug 就先不用 qcut做 直接cut吧， information value 差了 1倍 从 0.002 降到了 0.001
+        self.data = get_category(self.data, 'inc', 5, ["very low", "low", "medium", "high", "very high"])
+        iv, calculated_data = calculate_information_value(self.data, 'gp_inc', 'target')
+        iv_table.loc[iv_table['variable'] == 'inc', 'IV'] = iv
+        self.data = convert_dummy(self.data, 'gp_inc')
+        # print(calculated_data.head())
+
+    def describe_age(self):
+        iv_table = self.info_value_table
+        self.data['Age'] = -(self.data['DAYS_BIRTH']) // 365
+        print(self.data['Age'].value_counts(bins=10, normalize=True, sort=False))
+        self.data['Age'].plot(kind='hist', bins=20, density=True)
+
+        self.data = get_category(self.data, 'Age', 5, ["lowest", "low", "medium", "high", "highest"])
+        iv, data = calculate_information_value(self.data, 'gp_Age', 'target')
+        iv_table.loc[iv_table['variable'] == 'DAYS_BIRTH', 'IV'] = iv
+        print(data.head())
+        self.data = convert_dummy(self.data, 'gp_Age')
+
+    def describe_working_years(self):
+        iv_table = self.info_value_table
+        self.data['worktm'] = -(self.data['DAYS_EMPLOYED']) // 365
+        self.data[self.data['worktm'] < 0] = np.nan  # replace by na
+        self.data['DAYS_EMPLOYED']
+        self.data['worktm'].fillna(self.data['worktm'].mean(), inplace=True)  # replace na by mean
+        self.data['worktm'].plot(kind='hist', bins=20, density=True)
+
+        self.data = get_category(self.data, 'worktm', 5, ["lowest", "low", "medium", "high", "highest"])
+        iv, data = calculate_information_value(self.data, 'gp_worktm', 'target')
+        iv_table.loc[iv_table['variable'] == 'DAYS_EMPLOYED', 'IV'] = iv
+        print(data.head())
+
+        self.data = convert_dummy(self.data, 'gp_worktm')
+
+    def describe_family_size(self):
+        iv_table = self.info_value_table
+        self.data['famsize'].value_counts(sort=False)
+
+        self.data['famsize'] = self.data['famsize'].astype(int)
+        self.data['famsizegp'] = self.data['famsize']
+        self.data['famsizegp'] = self.data['famsizegp'].astype(object)
+        self.data.loc[self.data['famsizegp'] >= 3, 'famsizegp'] = '3more'
+        iv, data = calculate_information_value(self.data, 'famsizegp', 'target')
+        iv_table.loc[iv_table['variable'] == 'famsize', 'IV'] = iv
+        print(data.head())
+        self.data = convert_dummy(self.data, 'famsizegp')

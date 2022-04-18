@@ -10,4 +10,4 @@ descriptionService = DataDescriptionService()
 descriptionService.describe_binary_value()
 descriptionService.describe_continuous_value()
 descriptionService.describe_categorical_variable()
-
+descriptionService.show_information_value()

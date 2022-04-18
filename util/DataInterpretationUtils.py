@@ -321,3 +321,12 @@ class DataDescriptionService:
         data.head()
 
         self.data = convert_dummy(self.data, 'famtp')
+
+    # 最终显示 信息价值
+    def show_information_value(self):
+        iv_table = self.info_value_table
+        ivtable = iv_table.sort_values(by='IV', ascending=False)
+        ivtable.loc[ivtable['variable'] == 'DAYS_BIRTH', 'variable'] = 'agegp'
+        ivtable.loc[ivtable['variable'] == 'DAYS_EMPLOYED', 'variable'] = 'worktmgp'
+        ivtable.loc[ivtable['variable'] == 'inc', 'variable'] = 'incgp'
+        print(ivtable)

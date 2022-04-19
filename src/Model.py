@@ -112,6 +112,7 @@ class Model:
         plot_confusion_matrix(confusion_matrix(self.y_test, y_predict),
                               classes=class_names, normalize=True,
                               title='Normalized Confusion Matrix: CART')
+        return model
 
     def random_forest(self):
         class_names = ['0', '1']
@@ -130,6 +131,7 @@ class Model:
                               title='Normalized Confusion Matrix: Random Forests')
 
         # https://www.jianshu.com/p/71fde5d90136
+        return model
 
     def simple_ann(self):
         class_names = ['0', '1']
@@ -144,3 +146,4 @@ class Model:
         plot_confusion_matrix(confusion_matrix(self.y_test, y_predict),
                               classes=class_names, normalize=True,
                               title='A N N')
+        return clf

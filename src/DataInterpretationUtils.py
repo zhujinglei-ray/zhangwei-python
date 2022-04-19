@@ -201,6 +201,7 @@ class DataDescriptionService:
         iv_table = self.info_value_table
         self.data['work_time'] = -(self.data['DAYS_EMPLOYED']) // 365
         self.data[self.data['work_time'] < 0] = np.nan  # replace by na
+        print(self.data['work_time'].value_counts(bins=10, normalize=True, sort=False))
         self.data['DAYS_EMPLOYED']
         self.data['work_time'].fillna(self.data['work_time'].mean(), inplace=True)  # replace na by mean
         self.data['work_time'].plot(kind='hist', bins=20, density=True)
